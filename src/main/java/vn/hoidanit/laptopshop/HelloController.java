@@ -11,4 +11,14 @@ public class HelloController {
         return "Hello Spring MVC!!";
     }
 
+    @GetMapping("/user")
+    public String userPage() {
+        return "Only User can access page";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "Only admin can access page";
+    }
+
 }
