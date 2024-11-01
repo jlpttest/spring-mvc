@@ -20,6 +20,7 @@
         <body>
             <h1>Hello from jsp</h1>
             <h2> ${test}</h2>
+
             <button class="btn btn-success">Submit</button>
 
         </body>
