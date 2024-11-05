@@ -1,11 +1,18 @@
 package vn.hoidanit.laptopshop.domain;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,17 +23,46 @@ public class User {
     private String address;
     private String phone;
 
+    private String avatar;
+
+    // roleId
+    // user - role
+    // 1 user - 1 role
+    // 1 role - N user -> N-1
+    // user
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    // user - order
+    // 1 user - N order
+    // 1 user - 1 order
+    // -> 1 - N
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setOrder(List<Order> order) {
+        this.order = order;
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> order;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public List<Order> getOrder() {
+        return order;
+    }
+
     public long getId() {
         return id;
     }
 
     public User() {
-    }
-
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", email=" + email + ", password=" + password + ", username=" + username
-                + ", address=" + address + ", phone=" + phone + ", toString()=" + super.toString() + "]";
     }
 
     public String getEmail() {
@@ -72,4 +108,19 @@ public class User {
     public String getPhone() {
         return phone;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", email=" + email + ", password=" + password + ", username=" + username
+                + ", address=" + address + ", phone=" + phone + ", avatar=" + avatar + "]";
+    }
+
 }
