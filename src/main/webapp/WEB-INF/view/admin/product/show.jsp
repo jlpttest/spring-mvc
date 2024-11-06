@@ -30,7 +30,49 @@
                                     <li class="breadcrumb-item active">Products</li>
                                 </ol>
 
-                                <h1>Product page</h1>
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12 mx-auto">
+                                        <div class="d-flex justify-content-between p-3">
+                                            <h2>Table Users</h2>
+                                            <a href="/admin/product/create" class="btn btn-primary">Create Product</a>
+
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-12 col-xs-12 mx-auto p-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Price</th>
+                                                    <th scope="col">Factory</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="product" items="${products}">
+                                                    <tr>
+                                                        <th scope="row">${product.id}</th>
+                                                        <td>${product.name}</td>
+                                                        <td>${product.price}</td>
+                                                        <td>${product.factory}</td>
+                                                        <td>
+                                                            <a href="/admin/user/${user.id}"
+                                                                class="btn btn-success">View</a>
+                                                            <button class="btn btn-danger delete-user"
+                                                                data-id="${user.id}">Delete</button>
+                                                            <a href="/admin/user/update/${user.id}"
+                                                                class="btn btn-warning">Update</a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
 
                             </div>
                         </main>

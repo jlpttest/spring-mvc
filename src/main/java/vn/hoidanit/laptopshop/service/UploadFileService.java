@@ -22,6 +22,10 @@ public class UploadFileService {
 
     public String handleSaveFileUpload(MultipartFile file, String targetFolder) {
 
+        if (file == null || file.isEmpty()) {
+            return "";
+        }
+
         return saveFileToServer(file, targetFolder);
 
     }
@@ -29,6 +33,10 @@ public class UploadFileService {
     public String handleUpdateAvatar(MultipartFile file, String targetFolder, String oldAvatar) {
 
         String rootPath = this.servletContext.getRealPath("/resources/images");
+
+        if (file == null || file.isEmpty()) {
+            return "";
+        }
 
         if (oldAvatar != null && !oldAvatar.equals("default.jpg")) {
 

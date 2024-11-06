@@ -32,73 +32,73 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Manage Users</h1>
+                                <h1 class="mt-4">Manage Products</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                     <li class="breadcrumb-item active">Users</li>
                                 </ol>
                                 <div class="mt-1" style="width: 50%;">
-                                    <form:form class="row g-3" modelAttribute="newUser" action="/admin/user/create"
-                                        enctype="multipart/form-data">
+                                    <form:form class="row g-3" modelAttribute="newProduct"
+                                        action="/admin/product/create" enctype="multipart/form-data">
                                         <div class="col-md-12 col-12 mx-auto ">
                                             <h2>Register</h2>
                                             <p>Please fill in this form to create an account.</p>
                                             <hr>
                                         </div>
-                                        <div class="col-12 col-md-4 mx-auto">
-                                            <c:set var="errorEmail">
-                                                <form:errors path="email" cssClass="invalid-feedback" />
-                                            </c:set>
-                                            <label for="inputEmail4" class="form-label"><b>Email</b></label>
-                                            <form:input type="email"
-                                                class="form-control ${not empty errorEmail ? 'is-invalid' : ''}"
-                                                path="email" />
-                                            ${errorEmail}
-
-                                        </div>
-                                        <div class="col-md-4 col-12 mx-auto">
-                                            <c:set var="errorPassword">
-                                                <form:errors path="password" cssClass="invalid-feedback" />
-                                            </c:set>
-                                            <label for="inputPassword4" class="form-label"><b>Password</b></label>
-                                            <form:input type="password"
-                                                class="form-control ${not empty errorPassword ? 'is-invalid' : ''}"
-                                                path="password" />
-                                            ${errorEmail}
-                                        </div>
-                                        <div class="col-md-4 col-12 mx-auto">
-                                            <label for="inputPhoneNum" class="form-label"><b>Phone Number</b></label>
-                                            <form:input path="phone" type="text" class="form-control" id="inputPhoneNum"
-                                                placeholder="+841234567" required="required" />
-                                        </div>
-                                        <div class="col-md-4 col-12 mx-auto">
-                                            <c:set var="errorFullName">
-                                                <form:errors path="username" cssClass="invalid-feedback" />
-                                            </c:set>
-
-                                            <label for="inputName" class="form-label"><b>Full Name</b></label>
-                                            <form:input type="text" id="inputName"
-                                                class="form-control ${not empty errorFullName ? 'is-invalid' : ''}"
-                                                path="username" />
-                                            ${errorFullName}
-
-                                        </div>
-                                        <div class="col-md-4 col-12 mx-auto">
-                                            <label for="inputAddress" class="form-label"><b>Address</b></label>
-                                            <form:input path="address" type="text" class="form-control"
-                                                id="inputAddress" placeholder="Apartment, studio, or floor"
+                                        <div class="col-12 col-md-6 mx-auto">
+                                            <label for="inputName" class="form-label"><b>Name</b></label>
+                                            <form:input path="name" type="text" class="form-control" id="inputName"
                                                 required="required" />
                                         </div>
+                                        <div class="col-md-6 col-12 mx-auto">
+                                            <label for="inputPrice" class="form-label"><b>Price</b></label>
+                                            <form:input path="price" type="number" class="form-control" id="inputPrice"
+                                                required="required" />
+                                        </div>
+                                        <div class="col-md-12 col-12 mx-auto">
+                                            <label for="inputdetailDesc" class="form-label"><b>Detail
+                                                    description</b></label>
+                                            <form:textarea path="detailDesc" rows="3" class="form-control"
+                                                id="inputdetailDesc" required="required" />
+                                        </div>
+                                        <div class="col-md-6 col-12 mx-auto">
+                                            <label for="inputshortDesc" class="form-label"><b>Short
+                                                    Description</b></label>
+                                            <form:input path="shortDesc" type="text" class="form-control"
+                                                id="inputshortDesc" required="required" />
+                                        </div>
+                                        <div class="col-md-6 col-12 mx-auto">
+                                            <label for="inputquantity" class="form-label"><b>Quantity</b></label>
+                                            <form:input path="quantity" type="number" class="form-control"
+                                                id="inputquantity" required="required" />
+                                        </div>
 
-                                        <div class="mb-3 col-md-4 col-12 mx-auto">
-                                            <label class="form-label">Role:</label>
-                                            <form:select class="form-select" path="role.name">
-                                                <form:option value="ADMIN">ADMIN</form:option>
-                                                <form:option value="USER">USER</form:option>
+                                        <div class="mb-3 col-md-6 col-12 mx-auto">
+                                            <label class="form-label">Factory:</label>
+                                            <form:select class="form-select" path="factory">
+                                                <form:option value="APPLE">Apple (MacBook)</form:option>
+                                                <form:option value="ASUS">Asus</form:option>
+                                                <form:option value="LENOVO">Lenovo</form:option>
+                                                <form:option value="DELL">Dell</form:option>
+                                                <form:option value="LG">LG</form:option>
+                                                <form:option value="ACER">Acer</form:option>
+                                            </form:select>
+                                        </div>
+                                        <div class="mb-3 col-md-6 col-12 mx-auto">
+                                            <label class="form-label">Target:</label>
+                                            <form:select class="form-select" path="target">
+                                                <form:option value="GAMING">Gaming</form:option>
+                                                <form:option value="SINHVIEN-VANPHONG">Sinh viên - Văn phòng
+                                                </form:option>
+                                                <form:option value="THIET-KE-DO-HOA">Thiết kế đồ họa
+                                                </form:option>
+                                                <form:option value="MONG-NHE">Mỏng nhẹ</form:option>
+                                                <form:option value="DOANH-NHAN">Doanh nhân</form:option>
+
                                             </form:select>
                                         </div>
                                         <div class="mb-3 col-md-12 col-12 mx-auto">
-                                            <label for="avatarFile" class="form-label">Avatar:</label>
+                                            <label for="avatarFile" class="form-label">Image:</label>
                                             <input class="form-control" type="file" id="avatarFile" name="uploadFile"
                                                 accept=".png, .jpg, .jpeg">
                                         </div>
@@ -111,7 +111,8 @@
                                                 class="registerbtn btn btn-success"><b>Register</b></button>
                                         </div>
                                         <div class="col-md-6 col-12 mx-auto">
-                                            <a href="/admin/user" type="button" class="btn btn-danger"><b>Cancel</b></a>
+                                            <a href="/admin/product" type="button"
+                                                class="btn btn-danger"><b>Cancel</b></a>
                                         </div>
 
                                     </form:form>
