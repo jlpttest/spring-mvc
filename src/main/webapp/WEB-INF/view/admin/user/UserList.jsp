@@ -134,27 +134,6 @@
                             $('#staticBackdrop').modal('show');
                         });
 
-
-                        // // Confirm deletion
-                        // $('.delete-confirm').click(function () {
-                        //     // Perform the deletion action using the userId
-                        //     $.ajax({
-                        //         url: '/admin/user/delete/' + userId,
-                        //         type: 'DELETE',
-                        //         success: function (result) {
-                        //             // Handle the success, like reloading the table or displaying a success message
-                        //             alert('User deleted successfully.');
-                        //             location.reload(); // Reload the page or update the table data
-                        //         },
-                        //         error: function (error) {
-                        //             // Handle the error, like displaying an error message
-                        //             alert('An error occurred while deleting the user.');
-                        //         }
-                        //     });
-
-                        //     // Close the modal
-                        //     $('#staticBackdrop').modal('hide');
-                        // });
                     });
 
 

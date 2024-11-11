@@ -14,6 +14,7 @@
                 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -33,7 +34,7 @@
                                 <div class="row">
                                     <div class="col-md-12 col-xs-12 mx-auto">
                                         <div class="d-flex justify-content-between p-3">
-                                            <h2>Table Users</h2>
+                                            <h2>Table Products</h2>
                                             <a href="/admin/product/create" class="btn btn-primary">Create Product</a>
 
                                         </div>
@@ -58,11 +59,11 @@
                                                         <td>${product.price}</td>
                                                         <td>${product.factory}</td>
                                                         <td>
-                                                            <a href="/admin/user/${user.id}"
+                                                            <a href="/admin/product/${product.id}"
                                                                 class="btn btn-success">View</a>
-                                                            <button class="btn btn-danger delete-user"
-                                                                data-id="${user.id}">Delete</button>
-                                                            <a href="/admin/user/update/${user.id}"
+                                                            <button class="btn btn-danger delete-product"
+                                                                data-id="${product.id}">Delete</button>
+                                                            <a href="/admin/product/${product.id}/update"
                                                                 class="btn btn-warning">Update</a>
                                                         </td>
                                                     </tr>
@@ -77,6 +78,29 @@
                             </div>
                         </main>
                         <jsp:include page="../layout/footer.jsp" />
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header alert alert-danger">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Product
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <a type="button" href="#" class="btn btn-danger delete-confirm">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -87,5 +111,25 @@
                 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
                     crossorigin="anonymous"></script>
             </body>
+
+            <script>
+
+                $(document).ready(function () {
+                    var productId;
+                    var btnClick;
+
+                    $('.delete-product').click(function () {
+                        productId = $(this).data('id');
+                        console.log('Delete product with ID:', productId); // Add your deletion logic here
+                        $('.modal-body').html("Are you sure you want to delete product id: " + productId + "?");
+                        $('.delete-confirm').attr('href', '/admin/product/delete/' + productId);
+                        $('#staticBackdrop').modal('show');
+                    });
+
+                });
+
+
+            </script>
+
 
             </html>

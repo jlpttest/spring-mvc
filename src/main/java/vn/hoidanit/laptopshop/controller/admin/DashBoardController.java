@@ -8,7 +8,7 @@ public class DashBoardController {
 
     @GetMapping("/admin")
     public String showDashBoash() {
-        return "/admin/dashboard/show";
+        return "admin/dashboard/show";
     }
 
 }

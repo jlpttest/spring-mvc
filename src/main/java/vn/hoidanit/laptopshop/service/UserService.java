@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.dto.RegisterDTO;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
@@ -12,9 +14,11 @@ import vn.hoidanit.laptopshop.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     public String handleHello() {
@@ -29,9 +33,9 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public List<User> getAllUserByEmail(String email) {
-        return this.userRepository.findByEmail(email);
-    }
+    // public List<User> getAllUserByEmail(String email) {
+    // return this.userRepository.findByEmail(email);
+    // }
 
     public User getUserById(long id) {
         return this.userRepository.findById(id);
@@ -40,10 +44,25 @@ public class UserService {
     public void deleteUserById(long id) {
         this.userRepository.deleteById(id);
     }
-    // public boolean updateUserById(User user) {
 
-    // return this.userRepository.updateUserById(user.getId());
+    public User registerDTOtoUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setUsername(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        user.setEmail(registerDTO.getEmail());
+        user.setPassword(registerDTO.getPassword());
+        return user;
+    }
 
-    // }
+    public User getUserByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
+    public boolean checkEmailExist(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
+    }
 
 }

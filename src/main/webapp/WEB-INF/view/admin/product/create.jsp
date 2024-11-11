@@ -42,18 +42,28 @@
                                         action="/admin/product/create" enctype="multipart/form-data">
                                         <div class="col-md-12 col-12 mx-auto ">
                                             <h2>Register</h2>
-                                            <p>Please fill in this form to create an account.</p>
+                                            <p>Please fill in this form to create an Product.</p>
                                             <hr>
                                         </div>
                                         <div class="col-12 col-md-6 mx-auto">
+                                            <c:set var="errorName">
+                                                <form:errors path="name" cssClass="invalid-feedback" />
+                                            </c:set>
                                             <label for="inputName" class="form-label"><b>Name</b></label>
-                                            <form:input path="name" type="text" class="form-control" id="inputName"
-                                                required="required" />
+                                            <form:input type="text" id="inputName"
+                                                class="form-control ${not empty errorName ? 'is-invalid' : ''}"
+                                                path="name" />
+                                            ${errorName}
                                         </div>
                                         <div class="col-md-6 col-12 mx-auto">
+                                            <c:set var="errorPrice">
+                                                <form:errors path="price" cssClass="invalid-feedback" />
+                                            </c:set>
                                             <label for="inputPrice" class="form-label"><b>Price</b></label>
-                                            <form:input path="price" type="number" class="form-control" id="inputPrice"
-                                                required="required" />
+                                            <form:input type="text" id="inputPrice"
+                                                class="form-control ${not empty errorPrice ? 'is-invalid' : ''}"
+                                                path="price" />
+                                            ${errorPrice}
                                         </div>
                                         <div class="col-md-12 col-12 mx-auto">
                                             <label for="inputdetailDesc" class="form-label"><b>Detail
