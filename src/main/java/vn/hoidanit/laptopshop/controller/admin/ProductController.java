@@ -60,7 +60,7 @@ public class ProductController {
         String img = this.uploadFileService.handleSaveFileUpload(file, "product");
         product.setImage(img);
         this.productService.handleSaveProduct(product);
-        return "redirect:admin/product";
+        return "redirect:/admin/product";
     }
 
     @GetMapping("/admin/product/{id}")
@@ -76,7 +76,7 @@ public class ProductController {
     @GetMapping("/admin/product/delete/{id}")
     public String getMethodName(@PathVariable long id) {
         this.productService.deleteProductById(id);
-        return "redirect:admin/product";
+        return "redirect:/admin/product";
     }
 
 }
