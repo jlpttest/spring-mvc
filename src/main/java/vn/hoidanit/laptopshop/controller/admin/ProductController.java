@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
@@ -76,6 +77,44 @@ public class ProductController {
     @GetMapping("/admin/product/delete/{id}")
     public String getMethodName(@PathVariable long id) {
         this.productService.deleteProductById(id);
+        return "redirect:/admin/product";
+    }
+
+    @GetMapping("/admin/product/update/{id}")
+    public String getUpdatePage(@PathVariable long id, Model model) {
+
+        Product product = this.productService.getProductById(id);
+        model.addAttribute("updateProduct", product);
+
+        return "admin/product/update";
+    }
+
+    @PostMapping("/admin/product/update")
+    public String handleUpdateProduct(@ModelAttribute("updateProduct") @Valid Product pr,
+            BindingResult newProductBindingResult,
+            @RequestParam("uploadFile") MultipartFile file) {
+        // validate
+        if (newProductBindingResult.hasErrors()) {
+            return "admin/product/update";
+        }
+        Product currentProduct = this.productService.getProductById(pr.getId());
+
+        if (currentProduct != null) {
+            // update new image
+            if (!file.isEmpty()) {
+                String img = this.uploadFileService.handleSaveFileUpload(file, "product");
+                currentProduct.setImage(img);
+            }
+            currentProduct.setName(pr.getName());
+            currentProduct.setPrice(pr.getPrice());
+            currentProduct.setQuantity(pr.getQuantity());
+            currentProduct.setDetailDesc(pr.getDetailDesc());
+            currentProduct.setShortDesc(pr.getShortDesc());
+            currentProduct.setFactory(pr.getFactory());
+            currentProduct.setTarget(pr.getTarget());
+            this.productService.handleSaveProduct(currentProduct);
+        }
+
         return "redirect:/admin/product";
     }
 

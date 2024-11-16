@@ -1,5 +1,7 @@
 package vn.hoidanit.laptopshop.controller.client;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
+import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.dto.RegisterDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -31,7 +34,9 @@ public class HomePageController {
     }
 
     @GetMapping("/")
-    public String getHomePage() {
+    public String getHomePage(Model model) {
+        List<Product> products = this.productService.getAllProduct();
+        model.addAttribute("products", products);
         return "client/homepage/show";
     }
 

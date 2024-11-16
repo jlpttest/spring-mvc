@@ -35,18 +35,20 @@
                                 <h1 class="mt-4">Manage Products</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="/admin/product">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Create Product</li>
+                                    <li class="breadcrumb-item"><a href="/admin/product">Product</a></li>
+                                    <li class="breadcrumb-item active">Update product</li>
                                 </ol>
                                 <div class="mt-1" style="width: 50%;">
-                                    <form:form class="row g-3" modelAttribute="newProduct"
-                                        action="/admin/product/create" enctype="multipart/form-data">
+                                    <form:form class="row g-3" modelAttribute="updateProduct"
+                                        action="/admin/product/update" enctype="multipart/form-data">
                                         <div class="col-md-12 col-12 mx-auto ">
                                             <h2>Register</h2>
                                             <p>Please fill in this form to create an Product.</p>
                                             <hr>
                                         </div>
                                         <div class="col-12 col-md-6 mx-auto">
+                                            <form:input type="text" id="id" style="display: none;" clas="form-control"
+                                                path="id" />
                                             <c:set var="errorName">
                                                 <form:errors path="name" cssClass="invalid-feedback" />
                                             </c:set>
@@ -160,6 +162,13 @@
 
             <script>
                 $(document).ready(() => {
+
+                    const orgImage = "${updateProduct.image}";
+                    if (orgImage) {
+                        const urlImage = "/images/product/" + orgImage;
+                        $("#avatarPreview").attr("src", urlImage);
+                        $("#avatarPreview").css({ "display": "block" });
+                    }
                     const avatarFile = $("#avatarFile");
                     avatarFile.change(function (e) {
                         const imgURL = URL.createObjectURL(e.target.files[0]);

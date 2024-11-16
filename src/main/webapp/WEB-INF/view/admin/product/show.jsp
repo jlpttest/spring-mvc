@@ -63,7 +63,7 @@
                                                                 class="btn btn-success">View</a>
                                                             <button class="btn btn-danger delete-product"
                                                                 data-id="${product.id}">Delete</button>
-                                                            <a href="/admin/product/${product.id}/update"
+                                                            <a href="/admin/product/update/${product.id}"
                                                                 class="btn btn-warning">Update</a>
                                                         </td>
                                                     </tr>
