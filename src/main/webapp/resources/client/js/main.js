@@ -133,8 +133,14 @@
 
     // Product Quantity
     $('.quantity button').on('click', function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
         var button = $(this);
         var oldValue = button.parent().parent().find('input').val();
+        var productId = button.parent().parent().parents('tr').find("td:eq(0)").text();
+        var priceUnit = button.parent().parent().parents('tr').find("td:eq(2) p").text().trim().replace(/đ|,/g, '');;
+        var priceNumber = parseFloat(priceUnit);
+        console.log(productId);
         if (button.hasClass('btn-plus')) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
@@ -144,7 +150,108 @@
                 newVal = 0;
             }
         }
-        button.parent().parent().find('input').val(newVal);
+
+        $.ajax({
+            type: "POST",
+            url: "/add-product-to-cart",
+            timeout: 100000,
+            cache: false,
+            async: false,
+            data: {
+                productId: productId,
+                quantity: newVal
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            complete: function () {
+
+            },
+            success: function (data) {
+
+                console.log(data);
+                if (data === "success") {
+
+                    //alert("Successfully deleted");
+                    button.parent().parent().find('input').val(newVal);
+                    console.log("unit: " + priceNumber + "newVal: " + newVal);
+                    var productPrice = priceNumber * newVal;
+                    var formatTotalPrice = productPrice.toLocaleString();
+                    button.parent().parent().parents('tr').find("td:eq(4) p").html(formatTotalPrice + " đ");
+                    var newTotalPrice = 0;
+
+                    $('.cart-Detail tbody tr').each(function () {
+                        var newProductPrice = $(this).find("td:eq(4) p").text().replace(/đ|,|\n/g, '').trim();
+                        newTotalPrice += parseFloat(newProductPrice);
+                    });
+                    var formatNewTotalPrice = newTotalPrice.toLocaleString();
+                    $('.total-price').html(formatNewTotalPrice + " đ");
+                    $("#liveToastAdd").toast("show");
+                } else {
+                    alert("Failed to delete");
+                }
+
+            },
+            error: function (e) {
+                alert("Error:: failed to delete!!");
+                console.log("ERROR: ", e);
+            },
+            done: function (e) {
+
+            }
+        });
+    });
+
+    // Product Quantity
+    $('.delete-product').on('click', function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var button = $(this);
+        var productId = button.parents('tr').find("td:eq(0)").text();
+
+        $.ajax({
+            type: "POST",
+            url: "/delete-product-in-cart",
+            timeout: 100000,
+            cache: false,
+            async: false,
+            data: {
+                productId: productId
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            complete: function () {
+
+            },
+            success: function (data) {
+
+                console.log(data);
+                if (data === "success") {
+
+                    button.parents('tr').remove();
+                    var newTotalPrice = 0;
+
+                    $('.cart-Detail tbody tr').each(function () {
+                        var newProductPrice = $(this).find("td:eq(4) p").text().replace(/đ|,|\n/g, '').trim();
+                        newTotalPrice += parseFloat(newProductPrice);
+                    });
+                    var formatNewTotalPrice = newTotalPrice.toLocaleString();
+                    $('.total-price').html(formatNewTotalPrice + " đ");
+                    $("#liveToastDel").toast("show");
+                } else {
+                    alert("Failed to delete");
+                }
+
+            },
+            error: function (e) {
+                alert("Error:: failed to delete!!");
+                console.log("ERROR: ", e);
+            },
+            done: function (e) {
+
+            }
+        });
     });
 
 })(jQuery);

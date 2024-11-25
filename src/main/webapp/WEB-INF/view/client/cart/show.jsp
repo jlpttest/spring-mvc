@@ -10,7 +10,9 @@
                 <meta content="width=device-width, initial-scale=1.0" name="viewport">
                 <meta content="" name="keywords">
                 <meta content="" name="description">
-
+                <meta name="_csrf" content="${_csrf.token}" />
+                <!-- default header name is X-CSRF-TOKEN -->
+                <meta name="_csrf_header" content="${_csrf.headerName}" />
                 <!-- Google Web Fonts -->
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +61,7 @@
                             </nav>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table cart-Detail">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sản phẩm</th>
@@ -73,6 +75,7 @@
                                 <tbody>
                                     <c:forEach var="cartDetail" items="${cartDetails}">
                                         <tr>
+                                            <td style="display: none;">${cartDetail.product.id}</td>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
                                                     <img src="/images/product/${cartDetail.product.image}"
@@ -103,7 +106,7 @@
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
-                                                        value="1">
+                                                        value="${cartDetail.quantity}">
                                                     <div class="input-group-btn">
                                                         <button
                                                             class="btn btn-sm btn-plus rounded-circle bg-light border">
@@ -120,7 +123,8 @@
                                                 </p>
                                             </td>
                                             <td>
-                                                <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                <button
+                                                    class="btn btn-md rounded-circle bg-light border mt-4 delete-product">
                                                     <i class="fa fa-times text-danger"></i>
                                                 </button>
                                             </td>
@@ -139,7 +143,7 @@
                                         <h1 class="display-6 mb-4">Thông Tin <span class="fw-normal">Đơn Hàng</span>
                                             <div class="d-flex justify-content-between mb-4">
                                                 <h5 class="mb-0 me-4">Tạm tính:</h5>
-                                                <p class="mb-0">
+                                                <p class="mb-0 total-price">
                                                     <fmt:formatNumber type="number" value="${totalPrice}" />
                                                     đ
                                                 </p>
@@ -154,21 +158,46 @@
                                     </div>
                                     <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                         <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                                        <p class="mb-0 pe-4">
+                                        <p class="mb-0 pe-4 total-price">
                                             <fmt:formatNumber type="number" value="${totalPrice}" />
                                             đ
                                         </p>
                                     </div>
-                                    <button
-                                        class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
-                                        type="button">Xác nhận đặt hàng</button>
+                                    <a class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                                        type="button" href="/check-out">Xác nhận đặt hàng</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Cart Page End -->
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="liveToastAdd" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-success text-white">
+                            <strong class="me-auto">Info
+                            </strong>
+                            <button type="button" class="btn-close text-white" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Chúc mừng bạn đã thêm thành công vào giỏ hàng
+                        </div>
+                    </div>
+                </div>
 
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="liveToastDel" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-danger text-white">
+                            <strong class="me-auto">Info
+                            </strong>
+                            <button type="button" class="btn-close text-white" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Xóa sản phẩm thành công
+                        </div>
+                    </div>
+                </div>
 
                 <jsp:include page="../layout/footer.jsp" />
 

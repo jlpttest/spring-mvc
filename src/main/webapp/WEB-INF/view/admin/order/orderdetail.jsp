@@ -39,35 +39,42 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Total Price</th>
-                                                <th scope="col">User</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Action</th>
+                                                <th scope="col">Hình ảnh</th>
+                                                <th scope="col">Sản Phẩm</th>
+                                                <th scope="col">Giá</th>
+                                                <th scope="col">Số Lượng</th>
+                                                <th scope="col">Thành tiền</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="order" items="${orders}">
+                                            <c:forEach var="orderDetail" items="${orderDetails}">
                                                 <tr>
-                                                    <th scope="row">${order.id}</th>
-                                                    <td>
-                                                        <fmt:formatNumber type="number" value="${order.totalPrice}" /> đ
+                                                    <td scope="row"><img
+                                                            style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden;"
+                                                            src="/images/product/${orderDetail.product.image}" /></td>
+
+                                                    <td><a
+                                                            href="/admin/product/${orderDetail.product.id}">${orderDetail.product.name}</a>
                                                     </td>
-                                                    <td>${order.user.username}</td>
-                                                    <td>${order.status}</td>
                                                     <td>
-                                                        <a href="/admin/order-detail/${order.id}"
-                                                            class="btn btn-success">View</a>
-                                                        <button class="btn btn-danger delete-order"
-                                                            data-id="${order.id}">Delete</button>
-                                                        <a href="/admin/order/update/${order.id}"
-                                                            class="btn btn-warning">Update</a>
+                                                        <fmt:formatNumber type="number"
+                                                            value="${orderDetail.product.price}" />
+                                                        đ
+                                                    </td>
+                                                    <td>
+                                                        ${orderDetail.quantity}
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatNumber type="number"
+                                                            value="${orderDetail.product.price * orderDetail.quantity}" />
+                                                        đ
                                                     </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
                                     </table>
 
+                                    <a href="/admin/order" class="btn btn-primary">Back</a>
                                 </div>
                             </main>
                             <jsp:include page="../layout/footer.jsp" />

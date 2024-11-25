@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class ProductController {
 
     private UploadFileService uploadFileService;
     private ProductService productService;
+    private final int PAGE_SIZE = 3;
 
     public ProductController(UploadFileService uploadFileService, ProductService productService) {
         this.uploadFileService = uploadFileService;
@@ -32,9 +33,22 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String showProduct(Model model) {
-        List<Product> products = this.productService.getAllProduct();
+    public String showProduct(Model model, @RequestParam("page") Optional<String> pageNumber) {
+
+        int pageNumberConvert = 1;
+
+        try {
+            if (pageNumber.isPresent()) {
+                pageNumberConvert = Integer.parseInt(pageNumber.get());
+            }
+        } catch (Exception e) {
+            System.out.println("ProductController.showProduct()");
+        }
+
+        List<Product> products = this.productService.getAllProduct(PAGE_SIZE, pageNumberConvert - 1);
         model.addAttribute("products", products);
+        model.addAttribute("totalPages", this.productService.getAllProduct().size() / PAGE_SIZE + 1);
+        model.addAttribute("currentPage", pageNumberConvert);
 
         return "admin/product/show";
     }

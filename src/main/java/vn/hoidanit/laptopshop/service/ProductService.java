@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
+import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
+import vn.hoidanit.laptopshop.repository.OrderDetailRepository;
+import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 
 @Service
@@ -22,16 +29,22 @@ public class ProductService {
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
     private final UserService userService;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     public ProductService(
             ProductRepository productRepository,
             CartRepository cartRepository,
             CartDetailRepository cartDetailRepository,
-            UserService userService) {
+            UserService userService,
+            OrderRepository orderRepository,
+            OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.userService = userService;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     public void handleSaveProduct(Product product) {
@@ -111,6 +124,63 @@ public class ProductService {
         cartDetails = cart.getCardDetails();
 
         return cartDetails;
+    }
+
+    public void handlePlaceOrder(HttpSession session, String receiverName, String receiverAddress,
+            String receiverPhone) {
+
+        Long id = (Long) session.getAttribute("id");
+        User currentUser = this.userService.getUserById(id);
+        if (currentUser == null) {
+            return;
+        }
+        Cart cart = this.cartRepository.findByUser(currentUser);
+        if (cart == null) {
+            return;
+        }
+
+        List<CartDetail> cartDetails = this.cartDetailRepository.findByCart(cart);
+        if (cartDetails == null) {
+            return;
+        }
+        double totalPrice = 0;
+        Order order = new Order();
+        // create order
+        order.setUser(currentUser);
+        order.setReceiverName(receiverName);
+        order.setReceiverAddress(receiverAddress);
+        order.setReceiverPhone(receiverPhone);
+        for (CartDetail cartDetail : cartDetails) {
+            totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
+        }
+        order.setTotalPrice(totalPrice);
+        order.setStatus("PENDING");
+        this.orderRepository.save(order);
+        for (CartDetail cartDetail : cartDetails) {
+
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrder(order);
+            orderDetail.setPrice(cartDetail.getPrice());
+            orderDetail.setProduct(cartDetail.getProduct());
+            orderDetail.setQuantity(cartDetail.getQuantity());
+            this.orderDetailRepository.save(orderDetail);
+        }
+
+        // step 2: delete cart_detail and cart
+        for (CartDetail cd : cartDetails) {
+            this.cartDetailRepository.deleteById(cd.getId());
+        }
+        this.cartRepository.deleteById(cart.getId());
+        // step 3 : update session
+        session.setAttribute("sum", 0);
+
+    }
+
+    public List<Product> getAllProduct(int pageSize, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Product> prs = this.productRepository.findAll(pageable);
+        return prs.getContent();
+
     }
 
 }
